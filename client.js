@@ -357,6 +357,10 @@ var COMMANDS = {
 		if (!args.text.startsWith('New beta available at: https://beta.hack.chat/ or https://beta.hack.chat/?')){
 			args.nick = '*';
 			pushMessage(args);
+			if (args.text == 'You have been denied access to that channel and have been moved somewhere else. Retry later or wait for a mod to move you.'){
+				pushMessage({nick:'*',text:'【客户端信息】抱歉，您要加入的聊天室已经被锁定了，您已经被移动到了其他的地方。请可以尝试加入其他的聊天室。'})
+				myChannel = '聊天室被锁定'
+			}
 		}
 	},
 
@@ -385,6 +389,8 @@ var COMMANDS = {
 			pushMessage({nick:'*',text:'【客户端提示】您现在在外国人的聚集地，请不要说中文，否则可能会被辱骂或踢出聊天室。\n您也可以前往 ?your-channel 说中文。'})
 		}else if (myChannel == 'your-channel' || myChannel == 'china' || myChannel == 'chinese'){
 			pushMessage({nick:'*',text:'【客户端提示】您现在在中国人的聚集地，您可以在这里说中文。\n备注：这里偶尔会有外国人到访。'})
+		}else if (myChannel == 'purgatory'){
+			pushMessage({nick:'*',text:'您现在在“炼狱”，您现在无法进行聊天。\n您可以前往 ?your-channel 聊天'})
 		}
 		if (localStorageGet('color') && localStorageGet('color') !== 'reset'){
 			send({cmd:'changecolor',color:localStorageGet('color')})
