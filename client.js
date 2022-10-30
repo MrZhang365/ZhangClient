@@ -116,7 +116,7 @@ var frontpage = [
 	"",
 	"欢迎来到HackChat，这是一个小型的、无干扰的网络聊天室。",
 	"您可以通过网址来创建、加入或分享频道。修改网址中问号后面的内容即可创建或加入频道。",
-	"例如，要创建或者加入名为“your-channel”的频道，可以把网址改为："+location.protocol+"://"+document.domain+'/?your-channel',
+	"例如，要创建或者加入名为“your-channel”的频道，可以把网址改为："+location.protocol+"//"+document.domain+'/?your-channel',
 	"这里不会公布频道列表，因此可以使用秘密的频道名称进行私人讨论。",
 	"---",
 	"以下是预设频道：",
