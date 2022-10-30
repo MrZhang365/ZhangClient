@@ -350,7 +350,11 @@ var COMMANDS = {
 		if (ignoredUsers.indexOf(args.nick) >= 0) {
 			return;
 		}
-		pushMessage(args);
+		pushMessage(args);    //关键就是比速度
+		if (myChannel == 'programming' && (args.text.startsWith(`::ban ${myNick.split('#')[0]}`) || args.text.startsWith(`#!ban ${myNick.split('#')[0]}`)) && (args.mod || args.admin) && localStorageGet('no-banning') == 'true'){
+			ws.close()
+			pushMessage({nick:'*',text:'【客户端信息】检测到有管理员正在封禁您，为防止封禁，客户端已自动关闭连接。\n客户端无法保证您没有被封禁，请以实际为主。'})
+		}
 	},
 
 	info: function (args) {
@@ -386,9 +390,9 @@ var COMMANDS = {
 		pushMessage({ nick: '*', text: "在线的用户：" + nicks.join("，") })
 		pushMessage({nick:'*',text:'感谢您使用小张客户端，如果您愿意，您可以[资助我们](https://blog.mrzhang365.cf/images/WeChatPay.jpg)'})
 		if (myChannel == 'programming'){
-			pushMessage({nick:'*',text:'【客户端提示】您现在在外国人的聚集地，请不要说中文，否则可能会被辱骂或踢出聊天室。\n您也可以前往 ?your-channel 说中文。'})
+			pushMessage({nick:'*',text:'【客户端信息】您现在在外国人的聚集地，请不要说中文，否则可能会被辱骂或踢出聊天室。\n您也可以前往 ?your-channel 说中文。'})
 		}else if (myChannel == 'your-channel' || myChannel == 'china' || myChannel == 'chinese'){
-			pushMessage({nick:'*',text:'【客户端提示】您现在在中国人的聚集地，您可以在这里说中文。\n备注：这里偶尔会有外国人到访。'})
+			pushMessage({nick:'*',text:'【客户端信息】您现在在中国人的聚集地，您可以在这里说中文。\n备注：这里偶尔会有外国人到访。'})
 		}else if (myChannel == 'purgatory'){
 			pushMessage({nick:'*',text:'您现在在“炼狱”，无法进行聊天。\n您可以前往 ?your-channel 聊天'})
 		}
@@ -746,6 +750,12 @@ if (localStorageGet('joined-left') == 'false') {
 	$('#joined-left').checked = false;
 }
 
+if (localStorageGet('no-banning') == 'true') {
+	$('#no-banning').checked = true;
+}else{
+	$('#no-banning').checked = false;
+}
+
 if (localStorageGet('parse-latex') == 'false') {
 	$('#parse-latex').checked = false;
 	md.inline.ruler.disable([ 'katex' ]);
@@ -758,6 +768,13 @@ $('#pin-sidebar').onchange = function (e) {
 
 $('#joined-left').onchange = function (e) {
 	localStorageSet('joined-left', !!e.target.checked);
+}
+
+$('#no-banning').onchange = function (e) {
+	localStorageSet('no-banning', !!e.target.checked);
+	if (localStorageGet('no-banning') == 'true'){
+		pushMessage({nick:'*',text:'防封禁功能仅在 ?programming 频道有效，只能防止管理员调用gohackbot来封禁您。\n并且，我们==不能保证100%成功==。\n最后，请不要利用此功能做一些违规行为。'})
+	}
 }
 
 $('#parse-latex').onchange = function (e) {
