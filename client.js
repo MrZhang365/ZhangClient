@@ -390,7 +390,7 @@ var COMMANDS = {
 		}else if (myChannel == 'your-channel' || myChannel == 'china' || myChannel == 'chinese'){
 			pushMessage({nick:'*',text:'【客户端提示】您现在在中国人的聚集地，您可以在这里说中文。\n备注：这里偶尔会有外国人到访。'})
 		}else if (myChannel == 'purgatory'){
-			pushMessage({nick:'*',text:'您现在在“炼狱”，您现在无法进行聊天。\n您可以前往 ?your-channel 聊天'})
+			pushMessage({nick:'*',text:'您现在在“炼狱”，无法进行聊天。\n您可以前往 ?your-channel 聊天'})
 		}
 		if (localStorageGet('color') && localStorageGet('color') !== 'reset'){
 			send({cmd:'changecolor',color:localStorageGet('color')})
