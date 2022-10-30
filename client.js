@@ -386,6 +386,9 @@ var COMMANDS = {
 		}else if (myChannel == 'your-channel' || myChannel == 'china' || myChannel == 'chinese'){
 			pushMessage({nick:'*',text:'【客户端提示】您现在在中国人的聚集地，您可以在这里说中文。\n备注：这里偶尔会有外国人到访。'})
 		}
+		if (localStorageGet('color') && localStorageGet('color') !== 'reset'){
+			send({cmd:'changecolor',color:localStorageGet('color')})
+		}
 	},
 
 	onlineAdd: function (args) {
@@ -452,7 +455,7 @@ function pushMessage(args) {
 
 	messageEl.classList.add('message');
 
-	if (verifyNickname(myNick) && args.nick == myNick) {
+	if (verifyNickname(myNick.split('#')[0]) && args.nick == myNick.split('#')[0]) {
 		messageEl.classList.add('me');
 	} else if (args.nick == '!') {
 		messageEl.classList.add('warn');
@@ -472,7 +475,7 @@ function pushMessage(args) {
 	if (args.trip) {
 		var tripEl = document.createElement('span');
 
-		if (args.mod) {
+		if (args.mod || args.admin) {
 			tripEl.textContent = String.fromCodePoint(11088) + " " + args.trip + " ";
 		} else {
 			tripEl.textContent = args.trip + " ";
@@ -488,6 +491,13 @@ function pushMessage(args) {
 
 		if (args.color && /(^[0-9A-F]{6}$)|(^[0-9A-F]{3}$)/i.test(args.color)) {
 			nickLinkEl.setAttribute('style', 'color:#' + args.color + ' !important');
+			if (args.nick == myNick.split('#')[0]){
+				localStorageSet('color',args.color)
+			}
+		}else{
+			if (args.nick == myNick.split('#')[0]){
+				localStorageSet('color','reset')
+			}
 		}
 
 		nickLinkEl.onclick = function () {
