@@ -162,6 +162,8 @@ var myNick = localStorageGet('my-nick') || '';
 var myChannel = window.location.search.replace(/^\?/, '');
 var lastSent = [""];
 var lastSentPos = 0;
+var afk = false
+var autoAnswer = ''
 
 /** Notification switch and local storage behavior **/
 var notifySwitch = document.getElementById("notify-switch")
@@ -462,7 +464,13 @@ function pushMessage(args) {
 	) {
 		notify(args);
 	}
-
+	if (afk && args.nick == myNick.split('#')[0] && args.text !== '【自动回复】'+autoAnswer){
+		$('#afk').onchange({target:{checked : false}})
+		$('#afk').checked = false
+	}
+	if (args.cmd == 'chat' && args.text.match(new RegExp('@' + myNick.split('#')[0] + '\\b', "gi")) && afk){
+		send({cmd:'chat',text:'【自动回复】'+autoAnswer})
+	}
 	messageEl.classList.add('message');
 
 	if (verifyNickname(myNick.split('#')[0]) && args.nick == myNick.split('#')[0]) {
@@ -768,6 +776,25 @@ $('#pin-sidebar').onchange = function (e) {
 
 $('#joined-left').onchange = function (e) {
 	localStorageSet('joined-left', !!e.target.checked);
+}
+
+$('#afk').onchange = function (e) {
+	if (e.target.checked){
+		autoAnswer = prompt('请设置自动回复内容：')
+		if (!autoAnswer){
+			pushMessage({nick:'!',text:'自动回复内容不能为空。'})
+			autoAnswer = ''
+			e.target.checked = false
+			afk = false
+		}else{
+			afk = true
+			send({cmd:'emote',text:'进入了挂机状态'})
+		}
+	}else if (afk && !e.target.checked){
+		autoAnswer = ''
+		afk = false
+		send({cmd:'emote',text:'退出了挂机状态'})
+	}
 }
 
 $('#no-banning').onchange = function (e) {
