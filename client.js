@@ -354,8 +354,10 @@ var COMMANDS = {
 	},
 
 	info: function (args) {
-		args.nick = '*';
-		pushMessage(args);
+		if (!args.text.startsWith('New beta available at: https://beta.hack.chat/ or https://beta.hack.chat/?')){
+			args.nick = '*';
+			pushMessage(args);
+		}
 	},
 
 	emote: function (args) {
@@ -377,7 +379,13 @@ var COMMANDS = {
 			userAdd(nick);
 		});
 
-		pushMessage({ nick: '*', text: "在线的用户：" + nicks.join(", ") })
+		pushMessage({ nick: '*', text: "在线的用户：" + nicks.join("，") })
+		pushMessage({nick:'*',text:'感谢您使用小张客户端，如果您愿意，您可以[资助我们](https://blog.mrzhang365.cf/images/WeChatPay.jpg)'})
+		if (myChannel == 'programming'){
+			pushMessage({nick:'*',text:'【客户端提示】您现在在外国人的聚集地，请不要说中文，否则可能会被辱骂或踢出聊天室。\n您也可以前往 ?your-channel 说中文。'})
+		}else if (myChannel == 'your-channel' || myChannel == 'china' || myChannel == 'chinese'){
+			pushMessage({nick:'*',text:'【客户端提示】您现在在中国人的聚集地，您可以在这里说中文。\n备注：这里偶尔会有外国人到访。'})
+		}
 	},
 
 	onlineAdd: function (args) {
@@ -387,6 +395,9 @@ var COMMANDS = {
 
 		if ($('#joined-left').checked) {
 			pushMessage({ nick: '*', text: nick + " 加入了聊天室" });
+			if (args.trip === 'bw7Gkq' || args.trip === 'c01PWj'){
+				pushMessage({nick:'*',text:'【客户端信息】这位是小张客户端的制作者'})
+			}
 		}
 	},
 
@@ -422,6 +433,7 @@ var COMMANDS = {
 		$('#messages').appendChild(messageEl);
 
 		window.scrollTo(0, document.body.scrollHeight);
+		pushMessage({nick:'*',text:'【客户端信息】您要加入的聊天室已开启验证码，如果您看不清上面的验证码，请尝试：\n1. 打开Windows记事本\n2. 将上面的内容全部复制到记事本中\n3. 在本网页底部的输入框中输入您在记事本中看到的内容，然后按下回车\n\n如果验证码正确，那么您将会加入聊天室，否则会断开连接。'})
 	}
 }
 
