@@ -865,6 +865,13 @@ $('#afk').onchange = function (e) {
 			e.target.checked = false
 			afk = false
 		}else{
+			if (autoAnswer.indexOf('@'+getNick()) !== -1){
+				pushMessage({nick:'!',text:'自动回复内容不能包含@你自己的内容！否则会刷屏！'})
+				autoAnswer = ''
+				e.target.checked = false
+				afk = false
+				return
+			}
 			afk = true
 			send({cmd:'emote',text:'进入了挂机状态'})
 		}
