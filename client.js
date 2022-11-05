@@ -503,7 +503,7 @@ function pushMessage(args) {
 		$('#afk').onchange({target:{checked : false}})
 		$('#afk').checked = false
 	}
-	if (args.cmd == 'chat' && args.text.match(new RegExp('@' + getNick() + '\\b', "gi")) && afk){
+	if (args.cmd == 'chat' && args.text.match(new RegExp('@' + getNick() + '\\b', "gi")) && afk && args.text.indexOf('【自动回复】' === -1)){
 		send({cmd:'chat',text:'【自动回复】'+autoAnswer})
 	}
 	messageEl.classList.add('message');
