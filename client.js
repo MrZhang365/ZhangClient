@@ -164,11 +164,31 @@ var lastSent = [""];
 var lastSentPos = 0;
 var afk = false
 var autoAnswer = ''
+var shield = JSON.parse(localStorageGet('shield') || JSON.stringify({shield:[]})).shield
+var dev = false
 
 /** Notification switch and local storage behavior **/
 var notifySwitch = document.getElementById("notify-switch")
 var notifySetting = localStorageGet("notify-api")
 var notifyPermissionExplained = 0; // 1 = granted msg shown, -1 = denied message shown
+
+function saveShield(){
+	localStorageSet('shield',JSON.stringify({shield:shield}))
+}
+
+function shieldCheck(text){
+	var i = 0
+	for (i in shield){
+		if (text.toLowerCase().indexOf(shield[i]) !== -1){
+			return true
+		}
+	}
+	return false
+}
+
+function getNick(){
+	return myNick.split('#')[0]
+}
 
 // Initial request for notifications permission
 function RequestNotifyPermission() {
@@ -341,6 +361,9 @@ function join(channel) {
 		var args = JSON.parse(message.data);
 		var cmd = args.cmd;
 		var command = COMMANDS[cmd];
+		if (dev){
+			pushMessage({nick:'*',text:message.data})
+		}
 		if (command) {
 			command.call(null, args);
 		}
@@ -352,16 +375,24 @@ var COMMANDS = {
 		if (ignoredUsers.indexOf(args.nick) >= 0) {
 			return;
 		}
-		pushMessage(args);    //关键就是比速度
-		if (myChannel == 'programming' && (args.text.startsWith(`::ban ${myNick.split('#')[0]}`) || args.text.startsWith(`#!ban ${myNick.split('#')[0]}`)) && (args.mod || args.admin) && localStorageGet('no-banning') == 'true'){
-			ws.close()
-			pushMessage({nick:'*',text:'【客户端信息】检测到有管理员正在封禁您，为防止封禁，客户端已自动关闭连接。\n客户端无法保证您没有被封禁，请以实际为主。'})
+		if (shieldCheck(args.text)){
+			console.log(`原信息：\n[${args.trip || ''}]${args.nick}：${args.text}`)
+			args.text = '【已屏蔽】'
 		}
+		pushMessage(args);
 	},
 
 	info: function (args) {
 		if (!args.text.startsWith('New beta available at: https://beta.hack.chat/ or https://beta.hack.chat/?')){
 			args.nick = '*';
+			if (args.type === 'whisper' && typeof args.from === 'string'){
+				var whisperList = args.text.split(' ')
+				var whisperText = whisperList.slice(2).join(' ')
+				if (shieldCheck(whisperText)){
+					console.log(`原信息：\n[${args.trip || ''}]${args.text}`)
+					args.text = `${whisperList[0]} ${whisperList[1]} 【已屏蔽】`
+				}
+			}
 			pushMessage(args);
 			if (args.text == 'You have been denied access to that channel and have been moved somewhere else. Retry later or wait for a mod to move you.'){
 				pushMessage({nick:'*',text:'【客户端信息】抱歉，您要加入的聊天室已经被锁定了，您已经被移动到了其他的地方。请可以尝试加入其他的聊天室。'})
@@ -371,6 +402,10 @@ var COMMANDS = {
 	},
 
 	emote: function (args) {
+		if (shieldCheck(args.text)){
+			console.log(`原信息：\n[${args.trip || ''}] @${args.nick} ${args.text}`)
+			args.text = args.text.split(' ')[0] + ' 【已屏蔽】'
+		}
 		args.nick = '*';
 		pushMessage(args);
 	},
@@ -409,7 +444,7 @@ var COMMANDS = {
 		userAdd(nick);
 
 		if ($('#joined-left').checked) {
-			pushMessage({ nick: '*', text: nick + " 加入了聊天室" });
+			pushMessage({ nick: '*', text: nick + " 加入了聊天室",trip:args.trip || '' });
 			if (args.trip === 'bw7Gkq' || args.trip === 'c01PWj'){
 				pushMessage({nick:'*',text:'【客户端信息】这位是小张客户端的制作者'})
 			}
@@ -458,22 +493,22 @@ function pushMessage(args) {
 
 	if (
 		typeof (myNick) === 'string' && (
-			args.text.match(new RegExp('@' + myNick.split('#')[0] + '\\b', "gi")) ||
+			args.text.match(new RegExp('@' + getNick() + '\\b', "gi")) ||
 			((args.type === "whisper" || args.type === "invite") && args.from)
 		)
 	) {
 		notify(args);
 	}
-	if (afk && args.nick == myNick.split('#')[0] && args.text !== '【自动回复】'+autoAnswer){
+	if (afk && args.nick == getNick() && args.text !== '【自动回复】'+autoAnswer){
 		$('#afk').onchange({target:{checked : false}})
 		$('#afk').checked = false
 	}
-	if (args.cmd == 'chat' && args.text.match(new RegExp('@' + myNick.split('#')[0] + '\\b', "gi")) && afk){
+	if (args.cmd == 'chat' && args.text.match(new RegExp('@' + getNick() + '\\b', "gi")) && afk){
 		send({cmd:'chat',text:'【自动回复】'+autoAnswer})
 	}
 	messageEl.classList.add('message');
 
-	if (verifyNickname(myNick.split('#')[0]) && args.nick == myNick.split('#')[0]) {
+	if (verifyNickname(getNick()) && args.nick == getNick()) {
 		messageEl.classList.add('me');
 	} else if (args.nick == '!') {
 		messageEl.classList.add('warn');
@@ -509,11 +544,11 @@ function pushMessage(args) {
 
 		if (args.color && /(^[0-9A-F]{6}$)|(^[0-9A-F]{3}$)/i.test(args.color)) {
 			nickLinkEl.setAttribute('style', 'color:#' + args.color + ' !important');
-			if (args.nick == myNick.split('#')[0]){
+			if (args.nick == getNick()){
 				localStorageSet('color',args.color)
 			}
 		}else{
-			if (args.nick == myNick.split('#')[0]){
+			if (args.nick == getNick()){
 				localStorageSet('color','reset')
 			}
 		}
@@ -747,6 +782,55 @@ $('#clear-messages').onclick = function () {
 	messages.innerHTML = '';
 }
 
+$('#shield-add').onclick = function () {
+	var toAdd = prompt('请输入要屏蔽的内容：','').toLowerCase()
+	if (!toAdd){
+		pushMessage({nick:'!',text:'您输入的内容无效，请重试。'})
+		return
+	}
+	if (shield.indexOf(toAdd) !== -1){
+		pushMessage({nick:'!',text:'该内容已经被屏蔽了，无需重复操作。'})
+		return
+	}
+	shield.push(toAdd)
+	saveShield()
+	pushMessage({nick:'*',text:`已为您屏蔽包含 “${toAdd}” 的内容`})
+}
+$('#shield-del').onclick = function () {
+	var toDel = prompt('请输入要取消屏蔽的内容：','').toLowerCase()
+	if (!toDel){
+		pushMessage({nick:'!',text:'您输入的内容无效，请重试。'})
+		return
+	}
+	if (shield.indexOf(toDel) === -1){
+		pushMessage({nick:'!',text:'该内容没有被屏蔽，无需重复操作。'})
+		return
+	}
+    shield = shield.filter((text) => text !== toDel)
+	saveShield()
+	pushMessage({nick:'*',text:`已为您取消屏蔽包含 “${toDel}” 的内容`})
+}
+$('#shield-clear').onclick = function () {
+	if (!confirm('是否删除所有屏蔽内容？')){
+		return
+	}
+	shield = []
+	saveShield()
+	pushMessage({nick:'*',text:`已为您删除所有屏蔽内容`})
+}
+$('#shield-list').onclick = function () {
+	if (shield.length == 0){
+		pushMessage({nick:'*',text:'目前没有屏蔽的内容'})
+		return
+	}
+	var i = 0
+	var toPush = '目前屏蔽了以下内容：\n'
+	for (i in shield){
+		toPush += '`' + shield[i] + '`\n'
+	}
+	pushMessage({nick:'*',text:toPush})
+}
+
 // Restore settings from localStorage
 
 if (localStorageGet('pin-sidebar') == 'true') {
@@ -756,12 +840,6 @@ if (localStorageGet('pin-sidebar') == 'true') {
 
 if (localStorageGet('joined-left') == 'false') {
 	$('#joined-left').checked = false;
-}
-
-if (localStorageGet('no-banning') == 'true') {
-	$('#no-banning').checked = true;
-}else{
-	$('#no-banning').checked = false;
 }
 
 if (localStorageGet('parse-latex') == 'false') {
@@ -797,11 +875,8 @@ $('#afk').onchange = function (e) {
 	}
 }
 
-$('#no-banning').onchange = function (e) {
-	localStorageSet('no-banning', !!e.target.checked);
-	if (localStorageGet('no-banning') == 'true'){
-		pushMessage({nick:'*',text:'防封禁功能仅在 ?programming 频道有效，只能防止管理员调用gohackbot来封禁您。\n并且，我们==不能保证100%成功==。\n最后，请不要利用此功能做一些违规行为。'})
-	}
+$('#dev').onchange = function (e) {
+	dev = e.target.checked
 }
 
 $('#parse-latex').onchange = function (e) {
