@@ -558,6 +558,7 @@ function pushMessage(args) {
 			$('#chatinput').focus();
 		}
 		nickLinkEl.oncontextmenu = function(e) {
+			e.preventDefault();
 			insertAtCursor(buildReplyText({nick:args.nick,trip:args.trip || ''},args.text))
 			$('#chatinput').focus()
 		}
