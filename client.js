@@ -609,6 +609,9 @@ function buildReplyText(user,text){
 		replyText += `${user.nick}：\n`
 	}
 	for (i = 0;i < 6;i+=1){
+		if (!textList[i]){
+			break
+		}
 		replyText += '>' + textList[i] + '\n'
 	}
 	if (i < textList.length){
