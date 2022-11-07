@@ -557,6 +557,10 @@ function pushMessage(args) {
 			insertAtCursor("@" + args.nick + " ");
 			$('#chatinput').focus();
 		}
+		nickLinkEl.oncontextmenu = function(e) {
+			insertAtCursor(buildReplyText({nick:args.nick,trip:args.trip || ''},args.text))
+			$('#chatinput').focus()
+		}
 
 		var date = new Date(args.time || Date.now());
 		nickLinkEl.title = date.toLocaleString();
@@ -592,6 +596,29 @@ function insertAtCursor(text) {
 	input.selectionStart = input.selectionEnd = before.length;
 
 	updateInputSize();
+}
+
+function buildReplyText(user,text){
+	var replyText = `>`
+	var i = 0
+	const textList = text.split('\n')
+	if (user.trip){
+		replyText += `[${user.trip}] ${user.nick}：\n`
+	}else{
+		replyText += `${user.nick}：\n`
+	}
+	for (i = 0;i < 6;i+=1){
+		replyText += '>' + textList[i] + '\n'
+	}
+	if (i < textList.length){
+		replyText += '>……\n\n'
+	}else{
+		replyText += '\n'
+	}
+	if (user.nick !== getNick()){
+		replyText += `@${user.nick} `
+	}
+	return replyText
 }
 
 function send(data) {
