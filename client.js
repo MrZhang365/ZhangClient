@@ -129,7 +129,8 @@ var frontpage = [
 	"要发送程序代码，请按照此格式发送：\\`\\`\\`语言 代码\\`\\`\\`",
 	"---",
 	"HackChat的仓库：https://github.com/hack-chat",
-	"我们根据WTFPL和MIT开源许可证发布的服务器和web客户端。",
+	"HackChat根据WTFPL和MIT开源许可证发布的服务器和web客户端。",
+	"**注意：小张客户端不代表HackChat。**",
 	"---",
 	"没有聊天记录保存在HackChat服务器上。",
 	"但是某些频道内的部分用户或机器人可能会保留聊天记录。",
@@ -329,7 +330,7 @@ function join(channel) {
 			if (location.hash) {
 				myNick = location.hash.substr(1);
 			} else {
-				var newNick = prompt('请设置昵称：', myNick);
+				var newNick = prompt('请输入昵称：', myNick);
 				if (newNick !== null) {
 					myNick = newNick;
 				} else {
@@ -355,6 +356,12 @@ function join(channel) {
 		window.setTimeout(function () {
 			join(channel);
 		}, 2000);
+	}
+
+	ws.onerror = function () {
+		pushMessage({ nick:'!', text:`\
+# :(
+` })
 	}
 
 	ws.onmessage = function (message) {
@@ -397,6 +404,14 @@ var COMMANDS = {
 			if (args.text == 'You have been denied access to that channel and have been moved somewhere else. Retry later or wait for a mod to move you.'){
 				pushMessage({nick:'*',text:'【客户端信息】抱歉，您要加入的聊天室已经被锁定了，您已经被移动到了其他的地方。请可以尝试加入其他的聊天室。'})
 				myChannel = '聊天室被锁定'
+			}
+			var infoList = args.text.split(' ')
+			if (infoList[0] === getNick() && infoList[1] === 'is' && infoList[2] === 'now'){
+				args.text = `${infoList[0]} 更名为 ${infoList[3]}`
+				var nickList = myNick.split('#')
+				nickList[0] = infoList[3]
+				myNick = nickList.join('#')
+				localStorageSet('my-nick',myNick)
 			}
 		}
 	},
