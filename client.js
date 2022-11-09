@@ -361,7 +361,18 @@ function join(channel) {
 	ws.onerror = function () {
 		pushMessage({ nick:'!', text:`\
 # :(
-` })
+### 连接聊天室服务器时遇到问题，抱歉造成不便。
+#### 可能的原因：
+- 您的网络出现了问题
+- 小张客户端出现了未知的错误
+- HackChat服务器异常崩溃
+
+#### 请尝试：
+- 更换网络环境后再试
+- 将此错误报告给：Xiao_Zhang_123@outlook.com ，然后换用HackChat[默认客户端](https://hack.chat/)
+- 前往 [XChat](https://xq.kzw.ink/) 或 [TanChat](https://tanchat.fun/) 聊天
+
+##### 抱歉对您造成不便，敬请谅解。` })
 	}
 
 	ws.onmessage = function (message) {
