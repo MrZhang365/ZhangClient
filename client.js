@@ -411,7 +411,7 @@ var COMMANDS = {
 					args.text = `${whisperList[0]} ${whisperList[1]} 【已屏蔽】`
 				}
 			}
-			pushMessage(args);
+			
 			if (args.text == 'You have been denied access to that channel and have been moved somewhere else. Retry later or wait for a mod to move you.'){
 				pushMessage({nick:'*',text:'【客户端信息】抱歉，您要加入的聊天室已经被锁定了，您已经被移动到了其他的地方。请可以尝试加入其他的聊天室。'})
 				myChannel = '聊天室被锁定'
@@ -424,6 +424,7 @@ var COMMANDS = {
 				myNick = nickList.join('#')
 				localStorageSet('my-nick',myNick)
 			}
+			pushMessage(args);
 		}
 	},
 
