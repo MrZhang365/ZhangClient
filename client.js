@@ -46,7 +46,9 @@ var imgHostWhitelist = [
 	'postimg.cc',
 	'i.loli.net', 's2.loli.net',					// sm.ms
 	's1.ax1x.com', 's2.ax1x.com', 'z3.ax1x.com', 's4.ax1x.com',     // imgchr.com
-	'mrpig.eu.org'
+	'mrpig.eu.org',
+	'share.lyka.pro',    //?lobby里的图片分享链接
+	'i.gyazo.com',    //AfK_Bot的图片链接
 ]
 
 function getDomain(link) {
