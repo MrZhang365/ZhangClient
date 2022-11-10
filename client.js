@@ -43,7 +43,11 @@ var allowImages = false;
 var imgHostWhitelist = [
 	'i.imgur.com',
 	'imgur.com',
-];
+	'postimg.cc',
+	'i.loli.net', 's2.loli.net',					// sm.ms
+	's1.ax1x.com', 's2.ax1x.com', 'z3.ax1x.com', 's4.ax1x.com',     // imgchr.com
+	'mrpig.eu.org'
+]
 
 function getDomain(link) {
 	var a = document.createElement('a');
@@ -139,7 +143,7 @@ var frontpage = [
 	"https://github.com/MrZhang365/ZhangClient",
 	"https://gitee.com/MrZhang365/zhang-client",
 	"---",
-	"友情链接：[聊天室历史书](https://book.paperee.guru/#/chatroom-history-book/) | [XChat](https://xq.kzw.ink/) | [TanChat](https://tanchat.fun/) | [小张的博客](https://blog.mrzhang365.cf/) | [纸片君ee的个人主页](https://paperee.guru) | [Blaze的个人主页](https://blaze.sqj.repl.co/) | [Maggie的个人主页](https://thz.cool/)"
+	"友情链接：[聊天室历史书](https://book.paperee.guru/#/chatroom-history-book/) | [XChat](https://xq.kzw.ink/) | [TanChat](https://tanchat.fun/) | [小张的博客](https://blog.mrzhang365.cf/) | [纸片君ee的个人主页](https://paperee.guru) | [纸片君ee的博客](https://blog.paperee.guru/) | [Blaze的个人主页](https://blaze.sqj.repl.co/) | [Maggie的个人主页](https://thz.cool/)"
 ].join("\n");
 
 function $(query) {
