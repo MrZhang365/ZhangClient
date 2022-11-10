@@ -39,7 +39,7 @@ var markdownOptions = {
 var md = new Remarkable('full', markdownOptions);
 
 // image handler
-var allowImages = false;
+var allowImages = true;
 var imgHostWhitelist = [
 	'i.imgur.com',
 	'imgur.com',
