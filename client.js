@@ -429,6 +429,12 @@ var COMMANDS = {
 					localStorageSet('my-nick',myNick)
 				}
 				args.text = `${infoList[0]} 更名为 ${infoList[3]}`
+			}else if (infoList[0] === 'Banned'){
+				infoList[0] = '已封禁'
+				args.text = infoList.join(' ')
+			}else if (infoList[0] === 'Kicked'){
+				infoList[0] = '已踢出'
+				args.text = infoList.join(' ')
 			}
 			pushMessage(args);
 		}
