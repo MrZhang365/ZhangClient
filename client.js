@@ -417,12 +417,14 @@ var COMMANDS = {
 				myChannel = '聊天室被锁定'
 			}
 			var infoList = args.text.split(' ')
-			if (infoList[0] === getNick() && infoList[1] === 'is' && infoList[2] === 'now'){
+			if (infoList[1] === 'is' && infoList[2] === 'now'){
+				if (infoList[0] === getNick()){
+					var nickList = myNick.split('#')
+					nickList[0] = infoList[3]
+					myNick = nickList.join('#')
+					localStorageSet('my-nick',myNick)
+				}
 				args.text = `${infoList[0]} 更名为 ${infoList[3]}`
-				var nickList = myNick.split('#')
-				nickList[0] = infoList[3]
-				myNick = nickList.join('#')
-				localStorageSet('my-nick',myNick)
 			}
 			pushMessage(args);
 		}
