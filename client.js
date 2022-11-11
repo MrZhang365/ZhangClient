@@ -1023,12 +1023,14 @@ $('#parse-latex').onchange = function (e) {
 
 $('#log-messages').onchange = function (e) {
 	if (e.target.checked){
+		localStorageSet('log-messages', !!e.target.checked);
+		logMessages = e.target.checked
 		logMessage('[已启用聊天信息记录功能]')
 	}else{
 		logMessage('[已停用聊天信息记录功能]')
+		localStorageSet('log-messages', !!e.target.checked);
+		logMessages = e.target.checked
 	}
-	localStorageSet('log-messages', !!e.target.checked);
-	logMessages = e.target.checked
 }
 
 if (localStorageGet('syntax-highlight') == 'false') {
