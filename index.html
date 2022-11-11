@@ -65,6 +65,10 @@
         <label for="allow-imgur" title="发送图片，如：![](图片地址)">允许图片</label>
       </p>
       <p>
+        <input id="log-messages" type="checkbox">
+        <label for="log-messages">记录聊天信息</label>
+      </p>
+      <p>
         <input id = "afk" type = "checkbox">
         <label for = "afk">我在挂机</label>
       </p>
@@ -83,8 +87,11 @@
       </p>
       <hr>
       <p>
-        <button id="clear-messages">清除所有聊天信息</button>
+        <button id="clear-messages">清除本页内容</button>
       </p>
+      <hr>
+        <button id="copy-logs">拷贝聊天记录</button>
+        <button id="clear-logs">清除记录的聊天记录</button>
       <hr>
       <p>
         <button id="shield-list">查看屏蔽的内容</button>

@@ -173,6 +173,8 @@ var afk = false
 var autoAnswer = ''
 var shield = JSON.parse(localStorageGet('shield') || JSON.stringify({shield:[]})).shield
 var dev = false
+var logMessages = false
+var logs = ''
 
 /** Notification switch and local storage behavior **/
 var notifySwitch = document.getElementById("notify-switch")
@@ -181,6 +183,15 @@ var notifyPermissionExplained = 0; // 1 = granted msg shown, -1 = denied message
 
 function saveShield(){
 	localStorageSet('shield',JSON.stringify({shield:shield}))
+}
+
+function logMessage(msg){
+	if (!logMessages){
+		return    //别给我记录
+	}
+    var dat = new Date
+	const time = formatTime(dat)
+	logs += `[${time}]${msg}\n`
 }
 
 function shieldCheck(text){
@@ -399,6 +410,7 @@ var COMMANDS = {
 		if (ignoredUsers.indexOf(args.nick) >= 0) {
 			return;
 		}
+		logMessage(`[${args.trip || ''}]${args.nick}：${args.text}`)
 		if (shieldCheck(args.text)){
 			console.log(`原信息：\n[${args.trip || ''}]${args.nick}：${args.text}`)
 			args.text = '【已屏蔽】'
@@ -407,6 +419,9 @@ var COMMANDS = {
 	},
 
 	info: function (args) {
+		if (args.type !== 'whisper' && args.type !== 'invite'){
+            logMessage(`[提示]${args.text}`)
+		}
 		if (!args.text.startsWith('New beta available at: https://beta.hack.chat/ or https://beta.hack.chat/?')){
 			args.nick = '*';
 			if (args.type === 'whisper' && typeof args.from === 'string'){
@@ -443,6 +458,7 @@ var COMMANDS = {
 	},
 
 	emote: function (args) {
+		logMessage(`[${args.trip || ''}]${args.text}`)
 		if (shieldCheck(args.text)){
 			console.log(`原信息：\n[${args.trip || ''}] @${args.nick} ${args.text}`)
 			args.text = args.text.split(' ')[0] + ' 【已屏蔽】'
@@ -454,6 +470,7 @@ var COMMANDS = {
 	warn: function (args) {
 		args.nick = '!';
 		pushMessage(args);
+		logMessage(`[错误]${args.text}`)
 	},
 
 	onlineSet: function (args) {
@@ -464,8 +481,8 @@ var COMMANDS = {
 		nicks.forEach(function (nick) {
 			userAdd(nick);
 		});
-
 		pushMessage({ nick: '*', text: "在线的用户：" + nicks.join("，") })
+		logMessage(`已加入聊天室 ?${myChannel}。在线的用户：${nicks.join("，")}`)
 		pushMessage({nick:'*',text:'感谢您使用小张客户端，如果您愿意，您可以[资助我们](https://blog.mrzhang365.cf/images/WeChatPay.jpg)'})
 		if (myChannel == 'programming'){
 			pushMessage({nick:'*',text:'【客户端信息】您现在在外国人的聚集地，请不要说中文，否则可能会被辱骂或踢出聊天室。\n您也可以前往 ?your-channel 说中文。'})
@@ -490,6 +507,7 @@ var COMMANDS = {
 				pushMessage({nick:'*',text:'【客户端信息】这位是小张客户端的制作者'})
 			}
 		}
+		logMessage(`[${args.trip || ''}]${args.nick} 加入了聊天室`)
 	},
 
 	onlineRemove: function (args) {
@@ -500,6 +518,7 @@ var COMMANDS = {
 		if ($('#joined-left').checked) {
 			pushMessage({ nick: '*', text: nick + " 离开了聊天室" });
 		}
+		logMessage(`${args.nick} 离开了聊天室`)
 	},
 
 	captcha: function (args) {
@@ -638,6 +657,20 @@ function insertAtCursor(text) {
 	input.selectionStart = input.selectionEnd = before.length;
 
 	updateInputSize();
+}
+
+//格式化时间
+function formatTime(dat){
+    //获取年月日，时间
+    var year = dat.getFullYear();
+    var mon = (dat.getMonth()+1) < 10 ? "0"+(dat.getMonth()+1) : dat.getMonth()+1;
+    var data = dat.getDate()  < 10 ? "0"+(dat.getDate()) : dat.getDate();
+    var hour = dat.getHours()  < 10 ? "0"+(dat.getHours()) : dat.getHours();
+    var min =  dat.getMinutes()  < 10 ? "0"+(dat.getMinutes()) : dat.getMinutes();
+    var seon = dat.getSeconds() < 10 ? "0"+(dat.getSeconds()) : dat.getSeconds();
+				
+    var newDate = year +"-"+ mon +"-"+ data +" "+ hour +":"+ min +":"+ seon;
+    return newDate;
 }
 
 function buildReplyText(user,text){
@@ -854,6 +887,19 @@ $('#clear-messages').onclick = function () {
 	messages.innerHTML = '';
 }
 
+$('#copy-logs').onclick = function () {
+	navigator.clipboard.writeText(logs).then(function () {
+		pushMessage({ nick: '*', text: "已将聊天记录拷贝到剪贴板上" })
+	}, function () {
+		pushMessage({ nick: '!', text: "抱歉，由于某些问题，我们无法拷贝聊天记录。" })
+	});
+}
+
+$('#clear-logs').onclick = function(){
+	logs = ''
+	pushMessage({nick:'*',text:'已清除聊天记录'})
+}
+
 $('#shield-add').onclick = function () {
 	var toAdd = prompt('请输入要屏蔽的内容：','').toLowerCase()
 	if (!toAdd){
@@ -908,6 +954,11 @@ $('#shield-list').onclick = function () {
 if (localStorageGet('pin-sidebar') == 'true') {
 	$('#pin-sidebar').checked = true;
 	$('#sidebar-content').classList.remove('hidden');
+}
+
+if (localStorageGet('log-messages') == 'true') {
+	$('#log-messages').checked = true;
+	logMessages = true
 }
 
 if (localStorageGet('joined-left') == 'false') {
@@ -967,6 +1018,18 @@ $('#parse-latex').onchange = function (e) {
 	} else {
 		md.inline.ruler.disable([ 'katex' ]);
 		md.block.ruler.disable([ 'katex' ]);
+	}
+}
+
+$('#log-messages').onchange = function (e) {
+	localStorageSet('log-messages', !!e.target.checked);
+	logMessages = e.target.checked
+	var dat = new Date
+	const time = formatTime(dat)
+	if (e.target.checked){
+		logMessage('[已启用聊天信息记录功能]')
+	}else{
+		logMessage('[已停用聊天信息记录功能]')
 	}
 }
 
