@@ -43,12 +43,13 @@ var allowImages = true;
 var imgHostWhitelist = [
 	'i.imgur.com',
 	'imgur.com',
-	'postimg.cc',
+	'postimg.cc', 'i.postimg.cc','postimages.org',    //Postimages
 	'i.loli.net', 's2.loli.net',					// sm.ms
 	's1.ax1x.com', 's2.ax1x.com', 'z3.ax1x.com', 's4.ax1x.com',     // imgchr.com
 	'mrpig.eu.org',
 	'share.lyka.pro',    //?lobby里的图片分享链接
 	'i.gyazo.com',    //AfK_Bot的图片链接
+	'img.thz.cool',    //Maggie的图床
 ]
 
 function getDomain(link) {
