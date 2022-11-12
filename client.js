@@ -116,6 +116,7 @@ var verifyNickname = function (nick) {
 }
 
 var frontpage = [
+	'# 小张客户端',
 	"欢迎使用小张客户端在HackChat上聊天，HackChat是一个小型的、无干扰的网络聊天室。",
 	"您可以通过网址来创建、加入或分享频道。修改网址中问号后面的内容即可创建或加入频道。",
 	"例如，要创建或者加入名为“your-channel”的频道，可以把网址改为："+document.URL+'?your-channel',
