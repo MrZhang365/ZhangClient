@@ -116,18 +116,13 @@ var verifyNickname = function (nick) {
 }
 
 var frontpage = [
-	"                            _           _         _       _   ",
-	"                           | |_ ___ ___| |_   ___| |_ ___| |_ ",
-	"                           |   |_ ||  _| '_| |  _|   |_ ||  _|",
-	"                           |_|_|__/|___|_,_|.|___|_|_|__/|_|  ",
-	"",
-	"欢迎来到HackChat，这是一个小型的、无干扰的网络聊天室。",
+	"欢迎使用小张客户端在HackChat上聊天，HackChat是一个小型的、无干扰的网络聊天室。",
 	"您可以通过网址来创建、加入或分享频道。修改网址中问号后面的内容即可创建或加入频道。",
-	"例如，要创建或者加入名为“your-channel”的频道，可以把网址改为："+location.protocol+"//"+document.domain+'/?your-channel',
-	"这里不会公布频道列表，因此可以使用秘密的频道名称进行私人讨论。",
+	"例如，要创建或者加入名为“your-channel”的频道，可以把网址改为："+document.URL+'?your-channel',
+	"HackChat不会公布频道列表，因此可以使用秘密的频道名称进行私人讨论。",
 	"---",
 	"以下是预设频道：",
-	"中国人聚集地 → ?your-channel ?china ?chinese ←",
+	"唐人街 → ?your-channel ?china ?chinese ←",
 	"外国人聚集地 → ?programming ←",
 	"这是一个为您随机生成的频道： ?" + Math.random().toString(36).substr(2, 8),
 	"---",
@@ -146,7 +141,7 @@ var frontpage = [
 	"https://github.com/MrZhang365/ZhangClient",
 	"https://gitee.com/MrZhang365/zhang-client",
 	"---",
-	"友情链接：[聊天室历史书](https://book.paperee.guru/#/chatroom-history-book/) | [XChat](https://xq.kzw.ink/) | [TanChat](https://tanchat.fun/) | [小张的博客](https://blog.mrzhang365.cf/) | [纸片君ee的个人主页](https://paperee.guru) | [纸片君ee的博客](https://blog.paperee.guru/) | [Blaze的个人主页](https://blaze.sqj.repl.co/) | [Maggie的个人主页](https://thz.cool/)"
+	"友情链接：[聊天室历史书](https://book.paperee.guru/#/chatroom-history-book/) | [非官方 hack.chat wiki](非官方 hack.chat wiki) | [XChat](https://xq.kzw.ink/) | [TanChat](https://tanchat.fun/) | [小张的博客](https://blog.mrzhang365.cf/) | [纸片君ee的个人主页](https://paperee.guru) | [纸片君ee的博客](https://blog.paperee.guru/) | [Blaze的个人主页](https://blaze.sqj.repl.co/) | [Maggie的个人主页](https://thz.cool/)"
 ].join("\n");
 
 function $(query) {
