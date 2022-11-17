@@ -146,6 +146,28 @@ var frontpage = [
 	"友情链接：[聊天室历史书](https://book.paperee.guru/#/chatroom-history-book/) | [非官方 hack.chat wiki](https://hcwiki.netlify.app/) | [XChat](https://xq.kzw.ink/) | [TanChat](https://tanchat.fun/) | [小张的博客](https://blog.mrzhang365.cf/) | [纸片君ee的个人主页](https://paperee.guru) | [纸片君ee的博客](https://blog.paperee.guru/) | [Blaze的个人主页](https://blaze.sqj.repl.co/) | [Maggie的个人主页](https://thz.cool/)"
 ].join("\n");
 
+function getConfig(){
+	var xhr = new XMLHttpRequest()
+	xhr.open('GET','https://onlineservice.zhangsoft.cf/zhangclient')
+	xhr.onload = () => {
+		if (xhr.status === 200){
+			console.log('已获取数据')
+			try{
+				var data = JSON.parse(xhr.responseText)
+			}catch(err){
+				pushMessage({nick:'!',text:'小张软件云服务似乎未知错误，我们无法从服务器上获取到正确的信息。\n如果该问题反复出现，请及时联系：Xiao_Zhang_123@outlook.com\n感谢您的理解与支持！'})
+				return
+			}
+			imgHostWhitelist = data.whiteList
+			if (data.var > 1.5){
+				pushMessage({nick:'*',text:'检测到您使用的并不是最新版客户端，您可以清除浏览器缓存并刷新来使用最新版客户端'})
+			}
+		}else{
+			pushMessage({nick:'!',text:'无法连接到小张软件云服务，因此无法获取到最新配置，但您还是可以继续使用本客户端。\n如果此问题反复出现，请联系：Xiao_Zhang_123@outlook.com\n感谢您的理解与支持！'})
+		}
+	}
+}
+
 function $(query) {
 	return document.querySelector(query);
 }
