@@ -1224,7 +1224,9 @@ $('#scheme-selector').value = currentScheme;
 $('#highlight-selector').value = currentHighlight;
 
 /* main */
-
+setTimeout(function(){
+	getConfig()
+},500)
 if (myChannel == '') {
 	pushMessage({ text: frontpage });
 	$('#footer').classList.add('hidden');
