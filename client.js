@@ -152,19 +152,18 @@ function getConfig(){
 	xhr.send()
 	xhr.onload = () => {
 		if (xhr.status === 200){
-			console.log('已获取数据')
 			try{
 				var data = JSON.parse(xhr.responseText)
 			}catch(err){
-				pushMessage({nick:'!',text:'小张软件云服务似乎未知错误，我们无法从服务器上获取到正确的信息。\n如果该问题反复出现，请及时联系：Xiao_Zhang_123@outlook.com\n感谢您的理解与支持！'})
+				pushMessage({nick:'!',text:'【客户端信息】小张软件云服务出现未知错误，我们无法从服务器上获取到正确的信息。\n如果该问题反复出现，请及时联系：Xiao_Zhang_123@outlook.com\n感谢您的理解与支持！'})
 				return
 			}
 			imgHostWhitelist = data.whiteList
-			if (data.ver > 1.4){
-				pushMessage({nick:'*',text:'检测到您使用的并不是最新版客户端，您可以清除浏览器缓存并刷新来使用最新版客户端'})
+			if (data.ver > 1.5){
+				pushMessage({nick:'*',text:'【客户端信息】检测到您使用的并不是最新版客户端，您可以清除浏览器缓存并刷新来使用最新版客户端'})
 			}
 		}else{
-			pushMessage({nick:'!',text:'无法连接到小张软件云服务，因此无法获取到最新配置，但您还是可以继续使用本客户端。\n如果此问题反复出现，请联系：Xiao_Zhang_123@outlook.com\n感谢您的理解与支持！'})
+			pushMessage({nick:'!',text:'【客户端信息】连接到小张软件云服务时出现异常，因此无法获取到最新配置，但您还是可以继续使用本客户端。\n如果此问题反复出现，请联系：Xiao_Zhang_123@outlook.com\n感谢您的理解与支持！'})
 		}
 	}
 }
