@@ -149,6 +149,7 @@ var frontpage = [
 function getConfig(){
 	var xhr = new XMLHttpRequest()
 	xhr.open('GET','https://onlineservice.zhangsoft.cf/zhangclient')
+	xhr.send()
 	xhr.onload = () => {
 		if (xhr.status === 200){
 			console.log('已获取数据')
