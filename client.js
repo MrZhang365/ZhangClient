@@ -195,6 +195,7 @@ var shield = JSON.parse(localStorageGet('shield') || JSON.stringify({shield:[]})
 var dev = false
 var logMessages = false
 var logs = ''
+var blockedNicks = []
 
 /** Notification switch and local storage behavior **/
 var notifySwitch = document.getElementById("notify-switch")
@@ -431,6 +432,10 @@ var COMMANDS = {
 			return;
 		}
 		logMessage(`[${args.trip || ''}]${args.nick}：${args.text}`)
+		if (blockedNicks.indexOf(args.nick) !== -1){
+			console.log(`原信息：\n[${args.trip || ''}]${args.nick}：${args.text}`)
+			return
+		}
 		if (shieldCheck(args.text)){
 			console.log(`原信息：\n[${args.trip || ''}]${args.nick}：${args.text}`)
 			args.text = '【已屏蔽】'
@@ -479,6 +484,10 @@ var COMMANDS = {
 
 	emote: function (args) {
 		logMessage(`[${args.trip || ''}]${args.text}`)
+		if (blockedNicks.indexOf(args.nick)){
+			console.log(`原信息：\n[${args.trip || ''}] @${args.nick} ${args.text}`)
+			return
+		}
 		if (shieldCheck(args.text)){
 			console.log(`原信息：\n[${args.trip || ''}] @${args.nick} ${args.text}`)
 			args.text = args.text.split(' ')[0] + ' 【已屏蔽】'
@@ -525,6 +534,9 @@ var COMMANDS = {
 			pushMessage({ nick: '*', text: nick + " 加入了聊天室",trip:args.trip || '' });
 			if (args.trip === 'bw7Gkq' || args.trip === 'c01PWj'){
 				pushMessage({nick:'*',text:'【客户端信息】这位是小张客户端的制作者'})
+			}
+			if (blockedNicks.indexOf(args.nick) !== -1){
+				pushMessage({nick:'*',text:'【客户端信息】您已设置屏蔽该用户的信息'})
 			}
 		}
 		logMessage(`[${args.trip || ''}]${args.nick} 加入了聊天室`)
@@ -1086,6 +1098,19 @@ function userAdd(nick) {
 	user.onclick = function (e) {
 		userInvite(nick)
 	}
+	user.oncontextmenu = function(e) {
+		e.preventDefault()
+		if (blockedNicks.indexOf(nick) === -1){
+			blockedNicks.push(nick)
+			logMessage(`【客户端信息】已屏蔽来自 ${nick} 的信息`)
+			pushMessage({nick:'*',text:`已为您屏蔽来自昵称“${nick}”的信息\n再次右键单击即可取消屏蔽`})
+		}else{
+			blockedNicks = blockedNicks.filter((n) => n !== nick)
+			logMessage(`【客户端信息】已取消屏蔽来自 ${nick} 的信息`)
+			pushMessage({nick:'*',text:`已为您取消屏蔽来自昵称“${nick}”的信息`})
+		}
+	}
+	
 
 	var userLi = document.createElement('li');
 	userLi.appendChild(user);
