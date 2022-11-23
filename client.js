@@ -485,11 +485,11 @@ var COMMANDS = {
 	emote: function (args) {
 		logMessage(`[${args.trip || ''}]${args.text}`)
 		if (blockedNicks.indexOf(args.nick) !== -1){
-			console.log(`原信息：\n[${args.trip || ''}] @${args.nick} ${args.text}`)
+			console.log(`原信息：\n[${args.trip || ''}] ${args.text}`)
 			return
 		}
 		if (shieldCheck(args.text)){
-			console.log(`原信息：\n[${args.trip || ''}] @${args.nick} ${args.text}`)
+			console.log(`原信息：\n[${args.trip || ''}] ${args.text}`)
 			args.text = args.text.split(' ')[0] + ' 【已屏蔽】'
 		}
 		args.nick = '*';
