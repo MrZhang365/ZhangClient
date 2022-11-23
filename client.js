@@ -484,7 +484,7 @@ var COMMANDS = {
 
 	emote: function (args) {
 		logMessage(`[${args.trip || ''}]${args.text}`)
-		if (blockedNicks.indexOf(args.nick)){
+		if (blockedNicks.indexOf(args.nick) !== -1){
 			console.log(`原信息：\n[${args.trip || ''}] @${args.nick} ${args.text}`)
 			return
 		}
