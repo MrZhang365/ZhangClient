@@ -143,7 +143,7 @@ var frontpage = [
 	"https://github.com/MrZhang365/ZhangClient",
 	"https://gitee.com/MrZhang365/zhang-client",
 	"---",
-	"友情链接：[聊天室历史书](https://book.paperee.guru/#/chatroom-history-book/) | [非官方 hack.chat wiki](https://hcwiki.netlify.app/) | [XChat](https://xq.kzw.ink/) | [TanChat](https://tanchat.fun/) | [小张的博客](https://blog.mrzhang365.cf/) | [纸片君ee的个人主页](https://paperee.guru) | [纸片君ee的博客](https://blog.paperee.guru/) | [Blaze的个人主页](https://blaze.sqj.repl.co/) | [Maggie的个人主页](https://thz.cool/)"
+	"友情链接：[聊天室历史书（By 4n0n4me）](https://hcwiki.github.io/history/) | [非官方 hack.chat wiki](https://hcwiki.netlify.app/) | [XChat](https://xq.kzw.ink/) | [TanChat](https://tanchat.fun/) | [小张的博客](https://blog.mrzhang365.cf/) | [纸片君ee的个人主页](https://paperee.guru) | [纸片君ee的博客](https://blog.paperee.guru/) | [Blaze的个人主页](https://blaze.sqj.repl.co/) | [Maggie的个人主页](https://thz.cool/)"
 ].join("\n");
 
 function getConfig(){
