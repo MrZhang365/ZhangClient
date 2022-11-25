@@ -897,6 +897,17 @@ $('#sidebar').onmouseenter = $('#sidebar').ontouchstart = function (e) {
 	$('#sidebar-content').classList.remove('hidden');
 	$('#sidebar').classList.add('expand');
 	e.stopPropagation();
+	if (!localStorageGet('opened-sidebar')){    //如果没有打开过侧边栏
+		localStorageSet('opened-sidebar',1)    //标记打开过了
+		pushMessage({nick:'*',text:`# 恭喜！你发现了侧边栏！
+侧边栏是小张客户端里的一个非常重要的区域。
+在这里面，你可以对客户端进行自定义设置。
+侧边栏目前分为四个部分，即“关于小张客户端”、“关于HackChat”、设置和在线用户列表。
+前两个部分是用来介绍本客户端和HackChat聊天室的。
+在设置这一部分部分，你可以对客户端进行个性化设置，例如颜色主题和内容屏蔽。
+最后，是在线用户列表部分。这里显示了当前房间内所有的用户，左键点击他们的昵称即可邀请对方到另一个房间**（不要乱点，以免造成误会）**；右键单击昵称即可屏蔽对方的信息（如果对方有骚扰你的行为）。
+祝您玩得愉快！`})
+	}
 }
 
 $('#sidebar').onmouseleave = document.ontouchstart = function (event) {
