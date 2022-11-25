@@ -595,7 +595,7 @@ function pushMessage(args) {
 		$('#afk').onchange({target:{checked : false}})
 		$('#afk').checked = false
 	}
-	if (args.cmd == 'chat' && args.text.match(new RegExp('@' + getNick() + '\\b', "gi")) && afk && args.text.indexOf('【自动回复】' === -1)){
+	if (args.cmd === 'chat' && args.text.match(new RegExp('@' + getNick() + '\\b', "gi")) && afk && args.text.indexOf('【自动回复】' === -1)){
 		send({cmd:'chat',text:'【自动回复】'+autoAnswer})
 	}
 	messageEl.classList.add('message');
@@ -1270,13 +1270,14 @@ $('#scheme-selector').value = currentScheme;
 $('#highlight-selector').value = currentHighlight;
 
 /* main */
-setTimeout(function(){
-	getConfig()
-},500)
+
 if (myChannel == '') {
 	pushMessage({ text: frontpage });
 	$('#footer').classList.add('hidden');
 	$('#sidebar').classList.add('hidden');
 } else {
+	setTimeout(function(){
+		getConfig()
+	},500)
 	join(myChannel);
 }
