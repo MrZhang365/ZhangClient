@@ -760,6 +760,12 @@ function isAtBottom() {
 	return (window.innerHeight + window.scrollY) >= (document.body.scrollHeight - 1);
 }
 
+function shouldRickRoll(){    //Ohh, give you up~
+	return true
+	var date = new Date(); 
+	return (date.getMonth() + 1 === 4) && (date.getDate() === 1);    //Never gonna give, never gonna give 
+}
+
 function updateTitle() {
 	if (windowActive && isAtBottom()) {
 		unread = 0;
@@ -773,7 +779,11 @@ function updateTitle() {
 	}
 
 	if (unread > 0) {
-		title = '（' + unread + '条未读）' + title;
+		if (!shouldRickRoll()){
+			title = '（' + unread + '）' + title;
+		}else{
+			title = 'Never gonna give you up, never gonna let you down.'
+		}
 	}
 
 	document.title = title;
