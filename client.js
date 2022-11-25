@@ -761,7 +761,7 @@ function isAtBottom() {
 }
 
 function shouldRickRoll(){    //Ohh, give you up~
-	return true
+	//return true    //haha
 	var date = new Date(); 
 	return (date.getMonth() + 1 === 4) && (date.getDate() === 1);    //Never gonna give, never gonna give 
 }
