@@ -773,7 +773,7 @@ function updateTitle() {
 	}
 
 	if (unread > 0) {
-		title = '(' + unread + ') ' + title;
+		title = '（' + unread + '条未读）' + title;
 	}
 
 	document.title = title;
