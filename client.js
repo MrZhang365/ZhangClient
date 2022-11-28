@@ -646,6 +646,20 @@ function pushMessage(args) {
 		}
 
 		nickLinkEl.onclick = function () {
+			if ($('#chatinput').value.split(' ')[0] === '/kick'){
+				if (myChannel !== 'your-channel'){
+					pushMessage({
+						nick:'!',
+						text:'该功能仅在 ?your-channel 有效'
+					})
+					return
+				}
+				send({
+					cmd:'chat',
+					text:`:!kick ${args.nick}`
+				})
+				return
+			}
 			insertAtCursor("@" + args.nick + " ");
 			$('#chatinput').focus();
 		}
