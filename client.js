@@ -728,7 +728,7 @@ function buildReplyText(user,text){
 	}else{
 		replyText += `${user.nick}：\n`
 	}
-	for (i = 0;i < 6;i+=1){
+	for (i = 0;i < 8;i+=1){
 		if (!textList[i]){
 			break
 		}
