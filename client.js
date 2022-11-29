@@ -513,7 +513,7 @@ var COMMANDS = {
 		pushMessage({ nick: '*', text: "在线的用户：" + nicks.join("，") })
 		logMessage(`已加入聊天室 ?${myChannel}。在线的用户：${nicks.join("，")}`)
 		if (!localStorageGet('hideHelpUs')){
-			pushHTML({nick:'*',text:'<p>感谢您使用小张客户端，如果您愿意，您可以<a href = "https://blog.mrzhang365.cf/images/WeChatPay.jpg">资助我们</a><br>如果不想再显示这条信息，请点击<a onclick = "localStorageSet("hideHelpUs",1)">此处</a></p>'})
+			pushHTML({nick:'*',text:'<p>感谢您使用小张客户端，如果您愿意，您可以<a href = "https://blog.mrzhang365.cf/images/WeChatPay.jpg">资助我们</a><br>如果不想再显示这条信息，请点击<a onclick = "localStorageSet(\'hideHelpUs",1)\'>此处</a></p>'})
 		}
 		if (myChannel == 'programming'){
 			pushMessage({nick:'*',text:'【客户端信息】您现在在外国人的聚集地，请不要说中文，否则可能会被辱骂或踢出聊天室。\n您也可以前往 ?your-channel 说中文。'})
