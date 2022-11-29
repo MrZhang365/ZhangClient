@@ -512,7 +512,9 @@ var COMMANDS = {
 		});
 		pushMessage({ nick: '*', text: "在线的用户：" + nicks.join("，") })
 		logMessage(`已加入聊天室 ?${myChannel}。在线的用户：${nicks.join("，")}`)
-		pushMessage({nick:'*',text:'感谢您使用小张客户端，如果您愿意，您可以[资助我们](https://blog.mrzhang365.cf/images/WeChatPay.jpg)'})
+		if (!localStorageGet('hideHelpUs')){
+			pushHTML({nick:'*',text:'<p>感谢您使用小张客户端，如果您愿意，您可以<a href = "https://blog.mrzhang365.cf/images/WeChatPay.jpg">资助我们</a><br>如果不想再显示这条信息，请点击<a onclick = "localStorageSet("hideHelpUs",1)">此处</a></p>'})
+		}
 		if (myChannel == 'programming'){
 			pushMessage({nick:'*',text:'【客户端信息】您现在在外国人的聚集地，请不要说中文，否则可能会被辱骂或踢出聊天室。\n您也可以前往 ?your-channel 说中文。'})
 		}else if (myChannel == 'your-channel' || myChannel == 'china' || myChannel == 'chinese'){
@@ -678,6 +680,82 @@ function pushMessage(args) {
 	var textEl = document.createElement('p');
 	textEl.classList.add('text');
 	textEl.innerHTML = md.render(args.text);
+
+	messageEl.appendChild(textEl);
+
+	// Scroll to bottom
+	var atBottom = isAtBottom();
+	$('#messages').appendChild(messageEl);
+	if (atBottom) {
+		window.scrollTo(0, document.body.scrollHeight);
+	}
+
+	unread += 1;
+	updateTitle();
+}
+
+function pushHTML(args) {
+	// Message container
+	var messageEl = document.createElement('div');
+
+	if (
+		typeof (myNick) === 'string' && (
+			args.text.match(new RegExp('@' + getNick() + '\\b', "gi")) ||
+			((args.type === "whisper" || args.type === "invite") && args.from)
+		)
+	) {
+		notify(args);
+	}
+
+	messageEl.classList.add('message');
+
+	if (verifyNickname(getNick()) && args.nick == getNick()) {
+		messageEl.classList.add('me');
+	} else if (args.nick == '!') {
+		messageEl.classList.add('warn');
+	} else if (args.nick == '*') {
+		messageEl.classList.add('info');
+	} else if (args.admin) {
+		messageEl.classList.add('admin');
+	} else if (args.mod) {
+		messageEl.classList.add('mod');
+	}
+
+	// Nickname
+	var nickSpanEl = document.createElement('span');
+	nickSpanEl.classList.add('nick');
+	messageEl.appendChild(nickSpanEl);
+
+	if (args.trip) {
+		var tripEl = document.createElement('span');
+
+		if (args.mod || args.admin) {
+			tripEl.textContent = String.fromCodePoint(11088) + " " + args.trip + " ";
+		} else {
+			tripEl.textContent = args.trip + " ";
+		}
+
+		tripEl.classList.add('trip');
+		nickSpanEl.appendChild(tripEl);
+	}
+
+	if (args.nick) {
+		var nickLinkEl = document.createElement('a');
+		nickLinkEl.textContent = args.nick;
+
+		if (args.color && /(^[0-9A-F]{6}$)|(^[0-9A-F]{3}$)/i.test(args.color)) {
+			nickLinkEl.setAttribute('style', 'color:#' + args.color + ' !important');
+		}
+
+		var date = new Date(args.time || Date.now());
+		nickLinkEl.title = date.toLocaleString();
+		nickSpanEl.appendChild(nickLinkEl);
+	}
+
+	// Text
+	var textEl = document.createElement('p');
+	textEl.classList.add('text');
+	textEl.innerHTML = args.text;
 
 	messageEl.appendChild(textEl);
 
