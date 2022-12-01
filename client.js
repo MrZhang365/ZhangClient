@@ -185,6 +185,7 @@ function localStorageSet(key, val) {
 }
 
 var ws;
+var autoPing;
 var myNick = localStorageGet('my-nick') || '';
 var myChannel = window.location.search.replace(/^\?/, '');
 var lastSent = [""];
@@ -381,12 +382,18 @@ function join(channel) {
 		if (myNick && shouldConnect) {
 			localStorageSet('my-nick', myNick);
 			send({ cmd: 'join', channel: channel, nick: myNick });
+			autoPing = setInterval(() => {
+				send({
+					cmd:'ping'
+				})
+			},30000)
 		}
 
 		wasConnected = true;
 	}
 
 	ws.onclose = function () {
+		clearInterval(autoPing)
 		if (wasConnected) {
 			pushMessage({ nick: '!', text: "与服务器的连接被断开，正在重新连接..." });
 		}
@@ -397,6 +404,7 @@ function join(channel) {
 	}
 
 	ws.onerror = function () {
+		clearInterval(autoPing)
 		pushMessage({ nick:'!', text:`\
 # :(
 ### 连接聊天室服务器时遇到问题，抱歉造成不便。
