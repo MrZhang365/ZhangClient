@@ -594,6 +594,7 @@ function getFanyi(text){
 	xhr.open('GET','https://api.vvhan.com/api/fy?text='+text)
 	xhr.send()
 	var fanyi = ''
+	var got = false
 	xhr.onload = () => {
 		if (xhr.status === 200){
 			try{
@@ -602,12 +603,17 @@ function getFanyi(text){
 				pushMessage({nick:'!',text:'【客户端信息】无法从翻译API请求正确的数据！\n请联系 Xiao_Zhang_123@outlook.com 来报告此问题！\n感谢您的支持！'})
 				return false
 			}
+			got = true
 			fanyi = data.data.fanyi
 		}else{
 			pushMessage({nick:'!',text:'【客户端信息】无法从翻译API请求正确的数据！\n请联系 Xiao_Zhang_123@outlook.com 来报告此问题！\n感谢您的支持！'})
 		}
 	}
-    return fanyi
+	while (!got){
+		/* yoyo */
+	}
+	return fanyi
+    
 }
 
 function pushMessage(args) {
