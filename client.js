@@ -600,14 +600,24 @@ function getFanyi(text,html){
 				var data = JSON.parse(xhr.responseText)
 			}catch(err){
 				html.innerHTML += '<hr><p>抱歉，无法从翻译API上获取正确的信息。</p>'
+				var atBottom = isAtBottom();
+				if (atBottom) {
+					window.scrollTo(0, document.body.scrollHeight);
+				}
 			}
 			html.innerHTML += `<hr><p>翻译：${data.data.fanyi}</p>`
+			var atBottom = isAtBottom();
+			if (atBottom) {
+				window.scrollTo(0, document.body.scrollHeight);
+			}
 		}else{
 			html.innerHTML += '<hr><p>抱歉，无法从翻译API上获取正确的信息。</p>'
+			var atBottom = isAtBottom();
+			if (atBottom) {
+				window.scrollTo(0, document.body.scrollHeight);
+			}
 		}
 	}
-	return fanyi
-    
 }
 
 function pushMessage(args) {
