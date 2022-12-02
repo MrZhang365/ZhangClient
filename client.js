@@ -710,7 +710,7 @@ function pushMessage(args) {
 	textEl.classList.add('text');
 	textEl.innerHTML = md.render(args.text);
     textEl.ondblclick = function() {
-		var got = getFanyi()
+		var got = getFanyi(args.text)
 		if (!got){
 			return
 		}
