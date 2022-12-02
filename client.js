@@ -589,6 +589,27 @@ var COMMANDS = {
 	}
 }
 
+function getFanyi(text){
+	var xhr = new XMLHttpRequest()
+	xhr.open('GET','https://api.vvhan.com/api/fy?text='+text)
+	xhr.send()
+	var fanyi = ''
+	xhr.onload = () => {
+		if (xhr.status === 200){
+			try{
+				var data = JSON.parse(xhr.responseText)
+			}catch(err){
+				pushMessage({nick:'!',text:'【客户端信息】无法从翻译API请求正确的数据！\n请联系 Xiao_Zhang_123@outlook.com 来报告此问题！\n感谢您的支持！'})
+				return false
+			}
+			fanyi = data.data.fanyi
+		}else{
+			pushMessage({nick:'!',text:'【客户端信息】无法从翻译API请求正确的数据！\n请联系 Xiao_Zhang_123@outlook.com 来报告此问题！\n感谢您的支持！'})
+		}
+	}
+    return fanyi
+}
+
 function pushMessage(args) {
 	// Message container
 	var messageEl = document.createElement('div');
@@ -688,7 +709,13 @@ function pushMessage(args) {
 	var textEl = document.createElement('p');
 	textEl.classList.add('text');
 	textEl.innerHTML = md.render(args.text);
-
+    textEl.ondblclick = function() {
+		var got = getFanyi()
+		if (!got){
+			return
+		}
+		textEl.innerHTML += '\n<hr><p>'+got+'</p>'
+	}
 	messageEl.appendChild(textEl);
 
 	// Scroll to bottom
