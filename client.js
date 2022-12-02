@@ -599,11 +599,11 @@ function getFanyi(text,html){
 			try{
 				var data = JSON.parse(xhr.responseText)
 			}catch(err){
-				html.innerHTML += '<br><p>抱歉，无法从翻译API上获取正确的信息。</p>'
+				html.innerHTML += '<hr><p>抱歉，无法从翻译API上获取正确的信息。</p>'
 			}
-			html.innerHTML += `<br><hr><p>翻译：${data.data.fanyi}</p>`
+			html.innerHTML += `<hr><p>翻译：${data.data.fanyi}</p>`
 		}else{
-			html.innerHTML += '<br><p>抱歉，无法从翻译API上获取正确的信息。</p>'
+			html.innerHTML += '<hr><p>抱歉，无法从翻译API上获取正确的信息。</p>'
 		}
 	}
 	return fanyi
@@ -710,7 +710,7 @@ function pushMessage(args) {
 	textEl.classList.add('text');
 	textEl.innerHTML = md.render(args.text);
     textEl.ondblclick = function() {
-		getFanyi(textEl,textEl)
+		getFanyi(args.text,textEl)
 	}
 	messageEl.appendChild(textEl);
 
