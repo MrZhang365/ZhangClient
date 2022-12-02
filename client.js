@@ -589,28 +589,22 @@ var COMMANDS = {
 	}
 }
 
-function getFanyi(text){
+function getFanyi(text,html){
 	var xhr = new XMLHttpRequest()
 	xhr.open('GET','https://api.vvhan.com/api/fy?text='+text)
 	xhr.send()
 	var fanyi = ''
-	var got = false
 	xhr.onload = () => {
 		if (xhr.status === 200){
 			try{
 				var data = JSON.parse(xhr.responseText)
 			}catch(err){
-				pushMessage({nick:'!',text:'【客户端信息】无法从翻译API请求正确的数据！\n请联系 Xiao_Zhang_123@outlook.com 来报告此问题！\n感谢您的支持！'})
-				return false
+				html.innerHTML += '<br><p>抱歉，无法从翻译API上获取正确的信息。</p>'
 			}
-			got = true
-			fanyi = data.data.fanyi
+			html.innerHTML += `<br><hr><p>翻译：${data.data.fanyi}</p>`
 		}else{
-			pushMessage({nick:'!',text:'【客户端信息】无法从翻译API请求正确的数据！\n请联系 Xiao_Zhang_123@outlook.com 来报告此问题！\n感谢您的支持！'})
+			html.innerHTML += '<br><p>抱歉，无法从翻译API上获取正确的信息。</p>'
 		}
-	}
-	while (!got){
-		/* yoyo */
 	}
 	return fanyi
     
@@ -716,11 +710,7 @@ function pushMessage(args) {
 	textEl.classList.add('text');
 	textEl.innerHTML = md.render(args.text);
     textEl.ondblclick = function() {
-		var got = getFanyi(args.text)
-		if (!got){
-			return
-		}
-		textEl.innerHTML += '\n<hr><p>'+got+'</p>'
+		getFanyi(textEl)
 	}
 	messageEl.appendChild(textEl);
 
