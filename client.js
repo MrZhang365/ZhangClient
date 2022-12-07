@@ -591,7 +591,7 @@ function pushCaptcha(text) {    //cls指定messageEl添加什么classList
 	// Text
 	var textEl = document.createElement('p');
 	textEl.classList.add('text');
-	textEl.innerHTML = `<pre style="font-size:4px;line-height:8px;">${text}</pre>`
+	textEl.innerHTML = `<pre style="font-size:3px;line-height:8px;">${text}</pre>`
 
 	messageEl.appendChild(textEl);
 
