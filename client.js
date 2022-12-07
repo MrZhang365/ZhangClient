@@ -564,29 +564,46 @@ var COMMANDS = {
 	},
 
 	captcha: function (args) {
-		var messageEl = document.createElement('div');
-		messageEl.classList.add('info');
-
-
-		var nickSpanEl = document.createElement('span');
-		nickSpanEl.classList.add('nick');
-		messageEl.appendChild(nickSpanEl);
-
-		var nickLinkEl = document.createElement('a');
-		nickLinkEl.textContent = '#';
-		nickSpanEl.appendChild(nickLinkEl);
-
-		var textEl = document.createElement('pre');
-		textEl.style.fontSize = '4px';
-		textEl.classList.add('text');
-		textEl.innerHTML = args.text;
-
-		messageEl.appendChild(textEl);
-		$('#messages').appendChild(messageEl);
-
-		window.scrollTo(0, document.body.scrollHeight);
+		pushCaptcha(args.text)
 		pushMessage({nick:'*',text:'【客户端信息】您要加入的聊天室已开启验证码，如果您看不清上面的验证码，请尝试：\n1. 打开Windows记事本\n2. 将上面的内容全部复制到记事本中\n3. 在本网页底部的输入框中输入您在记事本中看到的内容，然后按下回车\n\n如果验证码正确，那么您将会加入聊天室，否则会断开连接。'})
 	}
+}
+
+function pushCaptcha(text) {    //cls指定messageEl添加什么classList
+	// Message container
+	var messageEl = document.createElement('div');
+
+	messageEl.classList.add('message');
+	messageEl.classList.add('info');
+
+	// Nickname
+	var nickSpanEl = document.createElement('span');
+	nickSpanEl.classList.add('nick');
+	messageEl.appendChild(nickSpanEl);
+
+	var nickLinkEl = document.createElement('a');
+	nickLinkEl.textContent = '#';
+
+	var date = new Date(Date.now());
+	nickLinkEl.title = date.toLocaleString();
+	nickSpanEl.appendChild(nickLinkEl);
+
+	// Text
+	var textEl = document.createElement('p');
+	textEl.classList.add('text');
+	textEl.innerHTML = `<pre style="font-size:5px;line-height:8px;">${text}</pre>`
+
+	messageEl.appendChild(textEl);
+
+	// Scroll to bottom
+	var atBottom = isAtBottom();
+	$('#messages').appendChild(messageEl);
+	if (atBottom) {
+		window.scrollTo(0, document.body.scrollHeight);
+	}
+
+	unread += 1;
+	updateTitle();
 }
 
 function getFanyi(text,html){
