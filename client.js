@@ -124,7 +124,7 @@ var frontpage = [
 	"HackChat不会公布频道列表，因此可以使用秘密的频道名称进行私人讨论。",
 	"---",
 	"以下是预设频道：",
-	"唐人街 → ?your-channel ?china ?chinese ←",
+	"唐人街 → ?your-channel ?lounge ?china ?chinese ←",
 	"外国人聚集地 → ?programming ←",
 	"这是一个为您随机生成的频道： ?" + Math.random().toString(36).substr(2, 8),
 	"---",
@@ -525,7 +525,7 @@ var COMMANDS = {
 		}
 		if (myChannel == 'programming'){
 			pushMessage({nick:'*',text:'【客户端信息】您现在在外国人的聚集地，请不要说中文，否则可能会被辱骂或踢出聊天室。\n您也可以前往 ?your-channel 说中文。'})
-		}else if (myChannel == 'your-channel' || myChannel == 'china' || myChannel == 'chinese'){
+		}else if (myChannel == 'your-channel' || myChannel == 'china' || myChannel == 'chinese' || myChannel == 'lounge'){
 			pushMessage({nick:'*',text:'【客户端信息】您现在在中国人的聚集地，您可以在这里说中文。\n备注：这里偶尔会有外国人到访。'})
 		}else if (myChannel == 'purgatory'){
 			pushMessage({nick:'*',text:'您现在在“炼狱”，无法进行聊天。\n您可以前往 ?your-channel 聊天'})
