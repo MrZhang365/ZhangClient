@@ -517,7 +517,7 @@ var COMMANDS = {
 			userAdd(nick);
 		});
 		pushMessage({ nick: '*', text: "在线的用户：" + nicks.join("，") })
-		logMessage(`已加入聊天室 ?${myChannel}。在线的用户：${nicks.join("，")}`)
+		logMessage(`已加入聊天室 ?${myChannel} 在线的用户：${nicks.join("，")}`)
 		if (!localStorageGet('hideHelpUs')){
 			pushHTML({nick:'*',text:'<p>感谢您使用小张客户端，如果您愿意，您可以<a href = "https://blog.mrzhang365.cf/images/WeChatPay.jpg">资助我们</a><br>如果不想再显示这条信息，请点击<a onclick = "localStorageSet(\'hideHelpUs\',1)">此处</a></p>'})
 		}
