@@ -452,9 +452,7 @@ var COMMANDS = {
 	},
 
 	info: function (args) {
-		if (args.type !== 'whisper' && args.type !== 'invite'){
-            logMessage(`[提示]${args.text}`)
-		}
+		logMessage(`[提示] ${args.trip || ''} ${args.text}`)
 		if (!args.text.startsWith('New beta available at: https://beta.hack.chat/ or https://beta.hack.chat/?')){
 			args.nick = '*';
 			if (args.type === 'whisper' && typeof args.from === 'string'){
