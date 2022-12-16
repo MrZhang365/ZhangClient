@@ -950,6 +950,10 @@ $('#chatinput').onkeydown = function (e) {
 			var text = e.target.value;
 			e.target.value = '';
 
+			if (localStorageGet('awa') == 'true'){
+				text=`${text.substr(0,1)}-${text} AwA`    //awa!
+			}
+
 			send({ cmd: 'chat', text: text });
 
 			lastSent[0] = text;
@@ -1162,6 +1166,10 @@ if (localStorageGet('log-messages') == 'true') {
 	logMessages = true
 }
 
+if (localStorageGet('awa') == 'true') {
+	$('#awa').checked = true;
+}
+
 if (localStorageGet('joined-left') == 'false') {
 	$('#joined-left').checked = false;
 }
@@ -1174,6 +1182,10 @@ if (localStorageGet('parse-latex') == 'false') {
 
 $('#pin-sidebar').onchange = function (e) {
 	localStorageSet('pin-sidebar', !!e.target.checked);
+}
+
+$('#awa').onchange = function(e){
+	localStorageSet('awa',e.target.checked)
 }
 
 $('#joined-left').onchange = function (e) {
