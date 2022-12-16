@@ -428,6 +428,14 @@ function join(channel) {
 		if (dev){
 			pushMessage({nick:'*',text:message.data})
 		}
+		if (typeof args.channel === 'string'){
+			if (args.channel !== myChannel){
+				pushMessage({
+					nick:'*',
+					text:`【客户端信息】检测到您被踢出（移出）原房间，您可以通过刷新网页来回到 ?${myChannel}\nTip：您目前所在的房间是 ?${args.channel}`
+				})
+			}
+		}
 		if (command) {
 			command.call(null, args);
 		}
