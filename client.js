@@ -950,7 +950,7 @@ $('#chatinput').onkeydown = function (e) {
 			var text = e.target.value;
 			e.target.value = '';
 
-			if (localStorageGet('awa') == 'true'){
+			if (localStorageGet('awa') == 'true' && !text.startsWith('/')){
 				text=`${text.substr(0,1)}-${text} AwA`    //awa!
 			}
 
