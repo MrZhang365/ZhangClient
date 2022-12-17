@@ -532,7 +532,9 @@ var COMMANDS = {
 		}
 		if (myChannel == 'programming'){
 			pushMessage({nick:'*',text:'【客户端信息】您现在在外国人的聚集地，请不要说中文，否则可能会被辱骂或踢出聊天室。\n您也可以前往 ?your-channel 说中文。'})
-		}else if (myChannel == 'your-channel' || myChannel == 'china' || myChannel == 'chinese' || myChannel == 'lounge'){
+		}else if (myChannel == 'your-channel' || myChannel == 'china' || myChannel == 'chinese'){
+			pushMessage({nick:'*',text:'【客户端信息】您现在在猴山，您可以在这里观猴。\n请注意：您必须文明观猴，否则会被他们使用权力武器（ModBot）踢出房间！\n祝您观猴愉快！'})
+		}else if (myChannel === 'lounge'){
 			pushMessage({nick:'*',text:'【客户端信息】您现在在中国人的聚集地，您可以在这里说中文。\n备注：这里偶尔会有外国人到访。'})
 		}else if (myChannel == 'purgatory'){
 			pushMessage({nick:'*',text:'您现在在“炼狱”，无法进行聊天。\n您可以前往 ?your-channel 聊天'})
