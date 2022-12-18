@@ -382,6 +382,14 @@ function join(channel) {
 
 		if (myNick && shouldConnect) {
 			localStorageSet('my-nick', myNick);
+			if (channel === 'lounge'){
+				ws.close()
+				pushMessage({
+					nick:'!',
+					text:'# 已阻止您进入危险区域\n由于某些原因，您要加入的房间（ ?lounge ）被列为危险区域，为了您的个人安全，所以阻止了您的操作，感谢您的理解！'
+				})
+				return
+			}
 			send({ cmd: 'join', channel: channel, nick: myNick });
 			autoPing = setInterval(() => {
 				send({
