@@ -589,7 +589,8 @@ var COMMANDS = {
 	}
 }
 
-function pushCaptcha(text) {    //cls指定messageEl添加什么classList
+//该函数部分代码来自HC++，HC++的开源地址：https://github.com/xjzh123/hackchat-client-plus
+function pushCaptcha(text) {
 	// Message container
 	var messageEl = document.createElement('div');
 
@@ -609,21 +610,49 @@ function pushCaptcha(text) {    //cls指定messageEl添加什么classList
 	nickSpanEl.appendChild(nickLinkEl);
 
 	// Text
-	var textEl = document.createElement('p');
-	textEl.classList.add('text');
-	textEl.innerHTML = `<pre style="font-size:5px;line-height:5px;">${text}</pre>`
 
-	messageEl.appendChild(textEl);
+	//在该函数内，这行注释之后的大部分代码来自HC++
+	let pEl = document.createElement('p')
+	pEl.classList.add('text')
 
-	// Scroll to bottom
-	var atBottom = isAtBottom();
-	$('#messages').appendChild(messageEl);
-	if (atBottom) {
-		window.scrollTo(0, document.body.scrollHeight);
+	let lines = text.split(/\n/g)
+
+	// Core principle: In SVG text can be smaller than 12px even in Chrome.
+	let svgEl = document.createElementNS(NS, 'svg')
+	svgEl.setAttribute('white-space', 'pre')
+	svgEl.style.backgroundColor = '#4e4e4e'
+	svgEl.style.width = '100%'
+
+	// In order to make 40em work right.
+	svgEl.style.fontSize = `${$('#messages').clientWidth / lines[0].length * 1.5}px`
+	// Captcha text is about 41 lines.
+	svgEl.style.height = '41em'
+
+	// I have tried `white-space: pre` but it didn't work, so I write each line in individual text tags.
+	for (let i = 0; i < lines.length; i++) {
+		let line = lines[i]
+		let textEl = document.createElementNS(NS, 'text')
+		textEl.innerHTML = line
+
+		// In order to make it in the right position. 
+		textEl.setAttribute('y', `${i + 1}em`)
+
+		// Captcha text shouldn't overflow #messages element, so I divide the width of the messages container with the overvalued length of each line in order to get an undervalued max width of each character, and than multiply it by 2 (The overvalued aspect ratio of a character) because the font-size attribute means the height of a character. 
+		textEl.setAttribute('font-size', `${$('#messages').clientWidth / lines[0].length * 1.5}px`)
+		textEl.setAttribute('fill', 'white')
+
+		// Preserve spaces.
+		textEl.style.whiteSpace = 'pre'
+
+		svgEl.appendChild(textEl)
 	}
 
-	unread += 1;
-	updateTitle();
+	pEl.appendChild(svgEl)
+
+	messageEl.appendChild(pEl);
+	$('#messages').appendChild(messageEl);
+
+	window.scrollTo(0, document.body.scrollHeight);
 }
 
 function getFanyi(text,html){
