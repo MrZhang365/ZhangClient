@@ -160,7 +160,7 @@ function getConfig(){
 				return
 			}
 			imgHostWhitelist = data.whiteList
-			if (data.ver > 1.5){
+			if (data.ver > 1.6){
 				pushMessage({nick:'*',text:'【客户端信息】检测到您使用的并不是最新版客户端，您可以清除浏览器缓存并刷新来使用最新版客户端'})
 			}
 		}else{
