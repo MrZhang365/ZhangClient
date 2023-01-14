@@ -581,10 +581,7 @@ var COMMANDS = {
 	},
 
 	captcha: function (args) {
-		args.text.split('\n').forEach((l) => {
-			pushCaptcha(l)
-		})
-		//pushCaptcha(args.text)
+		pushCaptcha(args.text)
 		pushMessage({nick:'*',text:'【客户端信息】您要加入的聊天室已开启验证码，如果您看不清上面的验证码，请尝试：\n1. 打开Windows记事本\n2. 将上面的内容全部复制到记事本中\n3. 在本网页底部的输入框中输入您在记事本中看到的内容，然后按下回车\n\n如果验证码正确，那么您将会加入聊天室，否则会断开连接。'})
 	}
 }
@@ -618,6 +615,7 @@ function pushCaptcha(text) {
 	let lines = text.split(/\n/g)
 
 	// Core principle: In SVG text can be smaller than 12px even in Chrome.
+	const NS = 'http://www.w3.org/2000/svg'
 	let svgEl = document.createElementNS(NS, 'svg')
 	svgEl.setAttribute('white-space', 'pre')
 	svgEl.style.backgroundColor = '#4e4e4e'
