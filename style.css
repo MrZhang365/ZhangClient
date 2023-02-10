@@ -102,6 +102,7 @@ ul li {
 }
 .text p {
   margin: 0;
+  word-break: break-all;
 }
 #footer {
   position: fixed;
@@ -167,6 +168,8 @@ pre {
   background-color: #4e4e4e;
   border: 1px solid #000;
   border-radius: 4px;
+  word-break: break-all;
+  word-wrap: break-word;
 }
 table {
   background-color: transparent;
