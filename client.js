@@ -1480,6 +1480,10 @@ $('#highlight-selector').value = currentHighlight;
 
 /* main */
 
+pushMessage({ nick: '!', text:'# 很抱歉……\n由于小张软件开发领域有变动，小张客户端已被弃用，感谢您的大力支持！\n我们将会在5秒后跳转到更好的 hack.chat++ 客户端。' })
+setTimeout(() => { location.href = 'https://hc.thz.cool/' }, 5000)
+
+/*
 if (myChannel == '') {
 	pushMessage({ text: frontpage });
 	$('#footer').classList.add('hidden');
@@ -1490,3 +1494,4 @@ if (myChannel == '') {
 	},500)
 	join(myChannel);
 }
+*/
